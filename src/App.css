@@ -1,0 +1,62 @@
+/* src/App.css */
+.App {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  align-items: center; /* Center horizontally */
+  justify-content: space-between; /* Push footer/keyboard down */
+}
+
+.App-header {
+  background-color: #f8f8f8;
+  padding: 10px 0;
+  border-bottom: 1px solid #e7e7e7;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.App-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: #333;
+}
+
+.play-again-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #6aaa64; /* Green */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-top: 10px; /* Space above keyboard */
+  transition: background-color 0.2s ease;
+}
+
+.play-again-button:hover {
+  background-color: #5a9a54;
+}
+
+/* Ensure content takes up space to push keyboard down */
+.App > *:not(.keyboard) {
+  flex-shrink: 0;
+}
+
+.board {
+  flex-grow: 1; /* Allow board to take space if needed, but usually fixed height */
+}
+
+
+@media (max-width: 500px) {
+    .App-header h1 {
+      font-size: 1.5rem;
+    }
+    /* Adjust tile/key sizes for smaller screens if needed */
+    /* Example:
+    .tile { width: 50px; height: 50px; font-size: 1.8rem; }
+    .key { height: 50px; }
+    */
+}

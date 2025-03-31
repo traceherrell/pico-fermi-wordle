@@ -1,0 +1,21 @@
+/* src/components/Row.css */
+.row {
+    display: grid;
+    grid-template-columns: repeat(var(--num-digits, 4), 1fr); /* Use CSS variable */
+    grid-gap: 5px;
+    margin-bottom: 5px;
+  }
+  
+  /* Add shake animation if needed */
+  /*
+  .row.shake {
+    animation: shake 0.5s ease-in-out;
+  }
+  
+  @keyframes shake {
+    10%, 90% { transform: translateX(-1px); }
+    20%, 80% { transform: translateX(2px); }
+    30%, 50%, 70% { transform: translateX(-4px); }
+    40%, 60% { transform: translateX(4px); }
+  }
+  */

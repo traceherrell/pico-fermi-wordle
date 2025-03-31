@@ -1,0 +1,74 @@
+/* src/components/Keyboard.css */
+.keyboard {
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 500px; /* Adjust as needed */
+  }
+  
+  .keyboard-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 8px;
+    width: 100%;
+  }
+  
+  .key {
+    font-family: inherit;
+    font-weight: bold;
+    border: 0;
+    padding: 0;
+    margin: 0 3px;
+    height: 58px;
+    flex: 1; /* Default flex for digit keys */
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+    background-color: #d3d6da; /* Default key color */
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.3); /* Touch feedback */
+    transition: background-color 0.1s ease;
+    font-size: 0.9rem; /* Adjust font size */
+    max-width: 45px; /* Max width for digit keys */
+  }
+  
+  .key:hover {
+    background-color: #c0c3c7;
+  }
+  
+  .key.special-key {
+     flex: 1.5; /* Make Enter/Backspace wider */
+     max-width: 80px;
+     font-size: 0.8rem;
+  }
+  
+  /* Key status colors */
+  .key.correct {
+    background-color: #6aaa64;
+    color: white;
+  }
+  .key.correct:hover {
+    background-color: #5a9a54;
+  }
+  
+  .key.present {
+    background-color: #c9b458;
+    color: white;
+  }
+  .key.present:hover {
+    background-color: #b9a448;
+  }
+  
+  .key.absent {
+    background-color: #787c7e;
+    color: white;
+  }
+  .key.absent:hover {
+    background-color: #686c6e;
+  }

@@ -1,0 +1,12 @@
+/* src/components/Board.css */
+.board {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 20px;
+    width: calc(var(--num-digits, 4) * (60px + 4px + 5px)); /* Tile width + margin + grid-gap */
+    max-width: 90vw;
+    margin-left: auto;
+    margin-right: auto;
+  }
