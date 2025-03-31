@@ -1,32 +1,34 @@
 // src/utils/gameLogic.js
 
-export const NUM_DIGITS = 4;
+export const DEFAULT_NUM_DIGITS = 4;
+export const MIN_NUM_DIGITS = 3;
+export const MAX_NUM_DIGITS = 8;
 export const MAX_ATTEMPTS = 6;
 
-export function generateSecretNumber() {
-  if (NUM_DIGITS > 10 || NUM_DIGITS < 1) {
-    throw new Error("Number of digits must be between 1 and 10.");
+export function generateSecretNumber(numDigits = DEFAULT_NUM_DIGITS) {
+  if (numDigits > MAX_NUM_DIGITS || numDigits < MIN_NUM_DIGITS) {
+    throw new Error(`Number of digits must be between ${MIN_NUM_DIGITS} and ${MAX_NUM_DIGITS}.`);
   }
   const digits = Array.from({ length: 10 }, (_, i) => i.toString());
   let secret = "";
-  for (let i = 0; i < NUM_DIGITS; i++) {
+  for (let i = 0; i < numDigits; i++) {
     const randomIndex = Math.floor(Math.random() * digits.length);
     secret += digits.splice(randomIndex, 1)[0];
   }
   return secret;
 }
 
-export function isValidGuess(guess) {
-  if (guess.length !== NUM_DIGITS) {
+export function isValidGuess(guess, numDigits = DEFAULT_NUM_DIGITS) {
+  if (guess.length !== numDigits) {
     return {
       valid: false,
-      message: `Guess must be ${NUM_DIGITS} digits long.`,
+      message: `Guess must be ${numDigits} digits long.`,
     };
   }
   if (!/^\d+$/.test(guess)) {
     return { valid: false, message: "Guess must only contain digits." };
   }
-  if (new Set(guess).size !== NUM_DIGITS) {
+  if (new Set(guess).size !== numDigits) {
     return { valid: false, message: "Digits in the guess must be unique." };
   }
   return { valid: true, message: "" };
@@ -37,12 +39,13 @@ export function isValidGuess(guess) {
  * Returns an array of status strings ('correct', 'present', 'absent')
  */
 export function getFeedback(guess, secret) {
-  const feedback = Array(NUM_DIGITS).fill("absent"); // gray
+  const numDigits = secret.length;
+  const feedback = Array(numDigits).fill("absent"); // gray
   const secretDigits = secret.split("");
   const guessDigits = guess.split("");
 
   // 1st Pass: Check for correct digits in the correct position (Fermi/Green)
-  for (let i = 0; i < NUM_DIGITS; i++) {
+  for (let i = 0; i < numDigits; i++) {
     if (guessDigits[i] === secretDigits[i]) {
       feedback[i] = "correct"; // green
       secretDigits[i] = null; // Mark as used
@@ -51,7 +54,7 @@ export function getFeedback(guess, secret) {
   }
 
   // 2nd Pass: Check for correct digits in the wrong position (Pico/Yellow)
-  for (let i = 0; i < NUM_DIGITS; i++) {
+  for (let i = 0; i < numDigits; i++) {
     // Only check digits not already marked correct
     if (guessDigits[i] !== null) {
       const secretIndex = secretDigits.indexOf(guessDigits[i]);

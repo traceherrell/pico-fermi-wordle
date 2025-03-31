@@ -1,13 +1,17 @@
 // src/components/Row.js
 import React from "react";
 import Tile from "./Tile";
-import { NUM_DIGITS } from "../utils/gameLogic";
+import { DEFAULT_NUM_DIGITS } from "../utils/gameLogic";
 import "./Row.css";
 
-function Row({ guessData, currentGuess }) {
+function Row({ guessData, currentGuess, numDigits = DEFAULT_NUM_DIGITS }) {
   const tiles = [];
+  
+  // Get the number of digits from guessData if available (for past guesses),
+  // otherwise use the provided numDigits prop or default
+  const digitsToRender = guessData?.guess?.length || numDigits;
 
-  for (let i = 0; i < NUM_DIGITS; i++) {
+  for (let i = 0; i < digitsToRender; i++) {
     let digit = "";
     let status = "empty"; // Default status
 

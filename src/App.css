@@ -1,4 +1,22 @@
 /* src/App.css */
+.digit-selector {
+  margin: 10px auto;
+  padding: 5px;
+  text-align: center;
+}
+
+.digit-selector label {
+  margin-right: 8px;
+  font-weight: bold;
+}
+
+.digit-selector select {
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  background-color: white;
+}
 .App {
   text-align: center;
   font-family: Arial, sans-serif;

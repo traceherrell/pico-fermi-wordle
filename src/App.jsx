@@ -9,12 +9,15 @@ import {
   getFeedback,
   isValidGuess,
   getKeyStatuses,
-  NUM_DIGITS,
+  DEFAULT_NUM_DIGITS,
+  MIN_NUM_DIGITS,
+  MAX_NUM_DIGITS,
   MAX_ATTEMPTS,
 } from "./utils/gameLogic";
 
 function App() {
   const [secretNumber, setSecretNumber] = useState("");
+  const [numDigits, setNumDigits] = useState(DEFAULT_NUM_DIGITS);
   const [guesses, setGuesses] = useState(Array(MAX_ATTEMPTS).fill(null)); // Store { guess: string, feedback: string[] }
   const [currentGuess, setCurrentGuess] = useState("");
   const [currentAttempt, setCurrentAttempt] = useState(0);
@@ -25,7 +28,7 @@ function App() {
 
   // Initialize game
   const initializeGame = useCallback(() => {
-    const newSecret = generateSecretNumber();
+    const newSecret = generateSecretNumber(numDigits);
     console.log("Secret Number (for debugging):", newSecret); // Keep for debugging
     setSecretNumber(newSecret);
     setGuesses(Array(MAX_ATTEMPTS).fill(null));
@@ -35,7 +38,7 @@ function App() {
     setMessage("");
     setMessageType("info");
     setKeyStatuses({});
-  }, []); // Empty dependency array means this useCallback creates the function once
+  }, [numDigits]); // Re-create function when numDigits changes
 
   useEffect(() => {
     initializeGame();
@@ -50,12 +53,12 @@ function App() {
       setMessageType("info");
 
       if (key === "Enter") {
-        if (currentGuess.length !== NUM_DIGITS) {
-          setMessage(`Guess must be ${NUM_DIGITS} digits.`);
+        if (currentGuess.length !== numDigits) {
+          setMessage(`Guess must be ${numDigits} digits.`);
           setMessageType("error");
           return;
         }
-        const validation = isValidGuess(currentGuess);
+        const validation = isValidGuess(currentGuess, numDigits);
         if (!validation.valid) {
           setMessage(validation.message);
           setMessageType("error");
@@ -87,7 +90,7 @@ function App() {
         }
       } else if (key === "Backspace") {
         setCurrentGuess((prev) => prev.slice(0, -1));
-      } else if (currentGuess.length < NUM_DIGITS && /^[0-9]$/.test(key)) {
+      } else if (currentGuess.length < numDigits && /^[0-9]$/.test(key)) {
         // Append digit if it's not already in the current guess
         if (!currentGuess.includes(key)) {
           setCurrentGuess((prev) => prev + key);
@@ -98,7 +101,7 @@ function App() {
         }
       }
     },
-    [currentGuess, currentAttempt, gameStatus, guesses, secretNumber]
+    [currentGuess, currentAttempt, gameStatus, guesses, secretNumber, numDigits]
   );
 
   // Handle physical keyboard events
@@ -121,16 +124,45 @@ function App() {
     };
   }, [handleKeyPress]); // Re-attach listener if handleKeyPress changes
 
+  // Handle digit length change
+  const handleDigitLengthChange = (length) => {
+    if (gameStatus !== "playing" || currentGuess === "" && currentAttempt === 0) {
+      setNumDigits(length);
+      initializeGame();
+    } else {
+      setMessage("You cannot change digit length during an active game");
+      setMessageType("error");
+    }
+  };
+
   return (
     <div className="App">
       <header className="App-header">
         <h1>Pico Fermi Bagel (Wordle Style)</h1>
       </header>
+      <div className="digit-selector">
+        <label htmlFor="digit-length">Number Length: </label>
+        <select 
+          id="digit-length" 
+          value={numDigits} 
+          onChange={(e) => handleDigitLengthChange(Number(e.target.value))}
+          disabled={gameStatus === "playing" && (currentGuess !== "" || currentAttempt > 0)}
+        >
+          {Array.from({ length: MAX_NUM_DIGITS - MIN_NUM_DIGITS + 1 }, (_, i) => i + MIN_NUM_DIGITS).map(
+            (length) => (
+              <option key={length} value={length}>
+                {length} digits
+              </option>
+            )
+          )}
+        </select>
+      </div>
       <MessageArea message={message} type={messageType} />
       <Board
         guesses={guesses}
         currentGuess={currentGuess}
         currentAttempt={currentAttempt}
+        numDigits={numDigits}
       />
       {(gameStatus === "won" || gameStatus === "lost") && (
         <button onClick={initializeGame} className="play-again-button">
