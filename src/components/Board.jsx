@@ -4,7 +4,12 @@ import Row from "./Row";
 import { MAX_ATTEMPTS, DEFAULT_NUM_DIGITS } from "../utils/gameLogic";
 import "./Board.css";
 
-function Board({ guesses, currentGuess, currentAttempt, numDigits = DEFAULT_NUM_DIGITS }) {
+function Board({
+  guesses,
+  currentGuess,
+  currentAttempt,
+  numDigits = DEFAULT_NUM_DIGITS,
+}) {
   const rows = [];
 
   // Set CSS variable for number of digits
@@ -18,7 +23,14 @@ function Board({ guesses, currentGuess, currentAttempt, numDigits = DEFAULT_NUM_
       rows.push(<Row key={i} guessData={guesses[i]} numDigits={numDigits} />);
     } else if (i === currentAttempt) {
       // Current typing row
-      rows.push(<Row key={i} currentGuess={currentGuess} numDigits={numDigits} />);
+      rows.push(
+        <Row
+          key={i}
+          guessData={guesses[i]}
+          currentGuess={currentGuess}
+          numDigits={numDigits}
+        />
+      );
     } else {
       // Future row
       rows.push(<Row key={i} numDigits={numDigits} />);

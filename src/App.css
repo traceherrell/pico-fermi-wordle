@@ -78,3 +78,10 @@
     .key { height: 50px; }
     */
 }
+
+/* Hide header and message area on mobile devices */
+@media screen and (max-width: 768px) {
+  .App-header, .message-area {
+    display: none;
+  }
+}

@@ -126,7 +126,10 @@ function App() {
 
   // Handle digit length change
   const handleDigitLengthChange = (length) => {
-    if (gameStatus !== "playing" || currentGuess === "" && currentAttempt === 0) {
+    if (
+      gameStatus !== "playing" ||
+      (currentGuess === "" && currentAttempt === 0)
+    ) {
       setNumDigits(length);
       initializeGame();
     } else {
@@ -142,19 +145,23 @@ function App() {
       </header>
       <div className="digit-selector">
         <label htmlFor="digit-length">Number Length: </label>
-        <select 
-          id="digit-length" 
-          value={numDigits} 
+        <select
+          id="digit-length"
+          value={numDigits}
           onChange={(e) => handleDigitLengthChange(Number(e.target.value))}
-          disabled={gameStatus === "playing" && (currentGuess !== "" || currentAttempt > 0)}
+          disabled={
+            gameStatus === "playing" &&
+            (currentGuess !== "" || currentAttempt > 0)
+          }
         >
-          {Array.from({ length: MAX_NUM_DIGITS - MIN_NUM_DIGITS + 1 }, (_, i) => i + MIN_NUM_DIGITS).map(
-            (length) => (
-              <option key={length} value={length}>
-                {length} digits
-              </option>
-            )
-          )}
+          {Array.from(
+            { length: MAX_NUM_DIGITS - MIN_NUM_DIGITS + 1 },
+            (_, i) => i + MIN_NUM_DIGITS
+          ).map((length) => (
+            <option key={length} value={length}>
+              {length} digits
+            </option>
+          ))}
         </select>
       </div>
       <MessageArea message={message} type={messageType} />
